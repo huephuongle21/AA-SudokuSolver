@@ -63,18 +63,11 @@ public class DancingLinksSolver extends StdSudokuSolver
     		int index1 = Integer.parseInt(newNode.col.name);
     		int index2 = Integer.parseInt(newNode.right.col.name);
     		int row = index1 / size;
-    		int col = index2 % size;
+    		int col = index1 % size;
     		int valueIndex = (index2 % size)+1;
     		System.out.println(valueIndex);
     		int value = valueRange[valueIndex-1];
     		result[row][col] = value;
-    		System.out.println(row + " " + col + " " + value);
-//    		for(int i = 0; i != size; i++) {
-//    			for(int j = 0; j != size; j++) {
-//    				System.out.print(result[i][j]);
-//    			}
-//    			System.out.println();
-//    		}
     	}
     }
 

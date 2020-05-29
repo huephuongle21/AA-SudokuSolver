@@ -47,7 +47,6 @@ public abstract class StdSudokuSolver extends SudokuSolver
     		for(int col = 1; col <= size; col++) {
     			int notFill = grid.getGridValue(row-1, col-1);
     			if(notFill != -1) {
-    				// System.out.println("NOT FILL " + notFill);
     				for(int valueIndex = 1; valueIndex <= size; valueIndex++) {
     					if(valueRange[valueIndex-1] != notFill) {
     						Arrays.fill(matrix[index(row,col,valueIndex)], 0);
