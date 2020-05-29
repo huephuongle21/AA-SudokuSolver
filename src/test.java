@@ -23,7 +23,7 @@ public class test {
 		BackTrackingSolver backtrack = new BackTrackingSolver();
 		
 		try {
-			killer.initGrid("1.in");
+			std.initGrid("1.in");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,9 +37,9 @@ public class test {
 //		System.out.println();
 //		std.print();
 //		
-		killer.print();
-		kBacktrack.solve(killer);
-		killer.print();
+		std.print();
+		dancingLink.solve(std);
+		std.print();
 		
 	}
 
