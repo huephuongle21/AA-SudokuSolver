@@ -45,7 +45,7 @@ public class DLX {
 		return header;
 	}
 	
-	public void solve(int coverRows, int k) {
+	public void solve() {
 		if(header.right == header) {
 			returnSolution = new ArrayList<ActionNode>(tmpSolution);		
 		} else {
@@ -57,7 +57,7 @@ public class DLX {
 				for(ActionNode j = i.right; j != i; j = j.right) {
 					j.col.cover();
 				}
-				solve(coverRows, k+1);
+				solve();
 				
 				i = tmpSolution.remove(tmpSolution.size()-1);
 				colN = i.col;

@@ -55,17 +55,6 @@ public abstract class StdSudokuSolver extends SudokuSolver
     			}
     		}
     	}
-    	
-    	for(int i = 0; i != coverRows; i++) {
-    		for(int j = 0; j != coverCols; j++) {
-    			if(matrix[i][j] == 0) {
-    				System.out.print("|");
-    			} else {
-    				System.out.print(matrix[i][j]);
-    			}
-    		}
-    		System.out.println();
-    	}
     }
     
     // Calculate index in the matrix

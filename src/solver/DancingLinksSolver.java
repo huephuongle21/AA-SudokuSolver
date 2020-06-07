@@ -28,7 +28,7 @@ public class DancingLinksSolver extends StdSudokuSolver
     	transformToMatrix(grid);
     	
         DLX dlx = new DLX(matrix);
-        dlx.solve(coverRows, 0);
+        dlx.solve();
         
         ArrayList<ActionNode> solution = dlx.getSolution();
         if(solution != null) {
@@ -65,7 +65,6 @@ public class DancingLinksSolver extends StdSudokuSolver
     		int row = index1 / size;
     		int col = index1 % size;
     		int valueIndex = (index2 % size)+1;
-    		System.out.println(valueIndex);
     		int value = valueRange[valueIndex-1];
     		result[row][col] = value;
     	}

@@ -214,7 +214,7 @@ public class AlgorXSolver extends StdSudokuSolver
     		listRows.clear();
     	}
     }
-    
+
     private int chooseCol() {
     	int min = Integer.MAX_VALUE;
     	int count = 0;
@@ -226,11 +226,11 @@ public class AlgorXSolver extends StdSudokuSolver
     			}
     		}
     		if (count > 0) {
-				if (count < min || col == -1) {
+    			if (count < min || col == -1) {
     				min = count;
     				col = i;
     			}
-			}
+    		}
     		count = 0;
     	}
     	return col;

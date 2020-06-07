@@ -18,6 +18,9 @@ public abstract class SudokuGrid
 	protected int value[];
 	protected int size;
 	protected int sqrt;
+	
+	//For killer sudoku
+	protected Cage[] listCage;
 
     /**
      * Load the specified file and construct an initial grid from the contents
@@ -95,11 +98,8 @@ public abstract class SudokuGrid
     }
     
     public abstract boolean validateNewCell(int row, int col, int value);
-    
-    //Delete after finish
-    public abstract void print();
-    
-    
+        
+    public abstract Cage[] getCage();
     
 
 } // end of abstract class SudokuGrid

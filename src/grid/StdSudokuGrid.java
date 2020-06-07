@@ -96,17 +96,12 @@ public class StdSudokuGrid extends SudokuGrid
     public String toString() {
         // TODO
     	StringBuilder output = new StringBuilder();
-    	output.append(size).append("\n");
     	for(int i = 0; i != size; i++) {
-    		output.append(value[i]).append(" ");
-    	}
-    	output.append("\n");
-    	for(int i = 0; i != size; i++) {
-    		for(int j = 0; j != size; j++) {
-    			String value = i+ "," + j + " " + grid[i][j] + "\n";
-    			output.append(value);
-    		}
-    	}
+			for(int j = 0; j != size; j++) {
+				output.append(grid[i][j]).append(" ");
+			}
+			output.append("\n");
+		}
         // placeholder
         return String.valueOf(output);
     } // end of toString()
@@ -158,18 +153,6 @@ public class StdSudokuGrid extends SudokuGrid
     } // end of validate()
 
 	@Override
-	public void print() {
-		// TODO Auto-generated method stub
-		for(int i = 0; i != size; i++) {
-			for(int j = 0; j != size; j++) {
-				System.out.print(grid[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
-
-
-	@Override
 	public void setValue(int row, int col, int value) {
 		// TODO Auto-generated method stub
 		grid[row][col] = value;
@@ -198,5 +181,12 @@ public class StdSudokuGrid extends SudokuGrid
 			}
 		}
 		return true;
+	}
+
+
+	@Override
+	public Cage[] getCage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 } // end of class StdSudokuGrid
