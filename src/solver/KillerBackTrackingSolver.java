@@ -3,7 +3,6 @@
  */
 
 package solver;
-
 import grid.SudokuGrid;
 
 
@@ -34,14 +33,6 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
     	}
     	int[] valueRange = grid.getValue();
     	for(int value : valueRange) {
-//    		grid.setValue(row, col, value);
-//    		if(!grid.validate()) {
-//    			grid.setValue(row, col, 0);
-//    		} else {
-//    			if(solve(grid)) {
-//    				return true;
-//    			}
-//    		}
     		if(grid.validateNewCell(row, col, value)) {
     			grid.setValue(row, col, value);
     			if(solve(grid)) {

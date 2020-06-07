@@ -22,7 +22,6 @@ import java.util.Set;
 public class KillerSudokuGrid extends SudokuGrid
 {
     // TODO: Add your own attributes
-	private Cage[] listCage;
 
     public KillerSudokuGrid() {
         super();
@@ -71,7 +70,7 @@ public class KillerSudokuGrid extends SudokuGrid
     		Cage cage = new Cage(list.get(i).get(j));
     		++j;
     		while(j < list.get(i).size()) {
-    			Cell cell = new Cell(list.get(i).get(j), list.get(i).get(j+1),0);
+    			Cell cell = new Cell(list.get(i).get(j), list.get(i).get(j+1), sqrt);
     			j += 2;
     			cage.addCell(cell);
     		}
@@ -95,28 +94,6 @@ public class KillerSudokuGrid extends SudokuGrid
     	}
     	output.close();
     } // end of outputBoard()
-
-
-    @Override
-    public String toString() {
-        // TODO
-    	StringBuilder output = new StringBuilder();
-    	output.append(size).append("\n");
-    	for(int i = 0; i != size; i++) {
-    		output.append(value[i]).append(" ");
-    	}
-    	output.append("\n");
-    	for(int i = 0; i != size; i++) {
-    		for(int j = 0; j != size; j++) {
-    			String value = i+ "," + j + " " + grid[i][j] + "\n";
-    			output.append(value);
-    		}
-    	}
-        // placeholder
-        return String.valueOf(output);
-
-    } // end of toString()
-
 
     @Override
     public boolean validate() {
@@ -168,17 +145,6 @@ public class KillerSudokuGrid extends SudokuGrid
         // placeholder
         return true;
     } // end of validate()
-    
-	@Override
-	public void print() {
-		// TODO Auto-generated method stub	
-		for(int i = 0; i != size; i++) {
-			for(int j = 0; j != size; j++) {
-				System.out.print(grid[i][j]);
-			}
-			System.out.println();
-		}
-	}
 	
 	@Override
 	public void setValue(int row, int col, int value) {
@@ -197,6 +163,16 @@ public class KillerSudokuGrid extends SudokuGrid
 	@Override
 	public boolean validateNewCell(int row, int col, int value) {
 		// TODO Auto-generated method stub
+		for(int i = 0; i != listCage.length; i++) {
+			Cage cage = listCage[i];
+			for(int j = 0; j != cage.nCells(); j++) {
+				Cell cell = cage.getCell(j);
+				if(cell.row() == row && cell.col() == col && !cage.isCellValid(j, value)) {
+					return false;
+				}
+			}
+		}
+		
 		for(int i = 0; i != size; i++) {
 			if(grid[row][i] == value) {
 				return false;
@@ -216,18 +192,30 @@ public class KillerSudokuGrid extends SudokuGrid
 				}
 			}
 		}
-		for(int i = 0; i != listCage.length; i++) {
-			Cage cage = listCage[i];
-			for(int j = 0; j != cage.nCells(); j++) {
-				Cell cell = cage.getCell(j);
-				if(cell.row() == row && cell.col() == col && !cage.isCellValid(j, value)) {
-					return false;
-				}
-			}
-		}
 		return true;
 		
 	}
+	
+	public Cage[] getCage() {
+		return listCage;
+	}
+
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		StringBuilder output = new StringBuilder();
+    	for(int i = 0; i != size; i++) {
+			for(int j = 0; j != size; j++) {
+				output.append(grid[i][j]).append(" ");
+			}
+			output.append("\n");
+		}
+        // placeholder
+        return String.valueOf(output);
+	}
+	
+	
 	
 
 } // end of class KillerSudokuGrid
