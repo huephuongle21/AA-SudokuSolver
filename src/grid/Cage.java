@@ -15,6 +15,7 @@ public class Cage {
 	public Set<Integer> rows = new HashSet<>();
 	public Set<Integer> cols = new HashSet<>();
 	public Set<Integer> nonets = new HashSet<>();
+	public Set<Integer> pv;
 	
 	public Cage(int value) {
 		cells = new ArrayList<Cell>();
@@ -95,7 +96,8 @@ public class Cage {
 		return tmpSolution.size();
 	}
 
-	public void setSolutions(List<Stack<Integer>> ps) {
+	public void setSolutions(List<Stack<Integer>> ps, Set<Integer> pv) {
+		this.pv = new HashSet<Integer>(pv);
 		generatePermutation(ps);
 	}
 	
@@ -148,5 +150,45 @@ public class Cage {
 	
 	public boolean checked() {
 		return this.valid;
+	}
+	
+	public boolean isRowUnique() {
+		return rows.size() == 1 ? true : false;
+	}
+	
+	public boolean isColUnique() {
+		return cols.size() == 1 ? true : false;
+	}
+	
+	public boolean isNonetUnique() {
+		return nonets.size() == 1 ? true : false;
+	}
+	
+	public int getRow() {
+		int row = -1;
+		for(Integer nRow : rows) {
+			row = nRow;
+		}
+		return row;
+	}
+	
+	public int getCol() {
+		int col = -1;
+		for(Integer nCol : cols) {
+			col = nCol;
+		}
+		return col;
+	}
+	
+	public int getNonet() {
+		int nonet = -1;
+		for(Integer nNonet : nonets) {
+			nonet = nNonet;
+		}
+		return nonet;
+	}
+
+	public void removePs(Stack<Integer> removed) {
+		tmpSolution.remove(removed);
 	}
 }

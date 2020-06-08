@@ -5,7 +5,9 @@
 package solver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import grid.Cage;
@@ -24,6 +26,10 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 	private List<Cage> cages;
 	private List<Cell> cells;
 	private List<Cell> finalSolution;
+	
+	static ArrayList<Constraint> rowConstraints = new ArrayList<Constraint>();
+	static ArrayList<Constraint> colConstraints = new ArrayList<Constraint>();
+	static ArrayList<Constraint> nonetConstraints = new ArrayList<Constraint>();
 
     public KillerAdvancedSolver() {
         // TODO: any initialisation you want to implement.
@@ -40,6 +46,7 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
     	convertToBoard();
     	cages = killerBoard.getCages();
     	cells = killerBoard.getCells();
+    	initializeConstraint();
     	
     	process();
     	if(finalSolution != null) {
@@ -68,12 +75,11 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 				int index = 0;
     			for(Cell cell : toTry.getCellArray()) {
     				int toSet = value.get(index);
-    				cell.setValue(toSet);
-    				if(!validateCell(cell)) {
-    					cell.setValue(0);
-    					break;
-    				} else {
+    				if(isCellValid(cell.row(), cell.col(), cell.getNonet(), toSet)) {
+    					cell.setValue(toSet);
     					index++;
+    				} else {
+    					break;
     				}
     			}
     			if(toTry.isCageFilled()) {
@@ -85,21 +91,6 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
     			toTry.setValid(false);
 			}
 		}
-	}
-	
-	private boolean validateCell(Cell cell) {
-		int row = cell.row();
-		int col = cell.col();
-		int nonet = cell.getNonet();
-		int value = cell.value();
-		for(Cell aCell : cells) {
-			if(!aCell.equals(cell) && aCell.value() != 0
-					&& (aCell.row() == row || aCell.col() == col || aCell.getNonet() == nonet)
-					&& aCell.value() == value) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	private void convertToBoard() {
@@ -122,13 +113,14 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 			int sum = 0;
 			Stack<Integer> oneSolution = new Stack<Integer>();
 			List<Stack<Integer>> possibleSolutions = new ArrayList<Stack<Integer>>();
-			possibleSolutions = calculateSum(oneSolution, sum, 0, total, size, possibleSolutions);
-			cage.setSolutions(possibleSolutions);
+			Set<Integer> pv = new HashSet<Integer>();
+			possibleSolutions = calculateSum(oneSolution, sum, 0, total, size, possibleSolutions, pv);
+			cage.setSolutions(possibleSolutions, pv);
     	}
 	}
 
 	private List<Stack<Integer>> calculateSum(Stack<Integer> oneSolution, int sum, int sIndex,
-			int total, int size, List<Stack<Integer>> listSolution) {
+			int total, int size, List<Stack<Integer>> listSolution, Set<Integer> pv) {
     	int[] listValue = grid.getValue();
 
         if (sum == total && oneSolution.size() == size) {
@@ -136,6 +128,7 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 
             for(Integer value : oneSolution) {
                 aSolution.add(value);
+                pv.add(value);
             }
 
             listSolution.add(aSolution);
@@ -147,12 +140,55 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
             if(sum + toAdd <= total) {
             	oneSolution.add(toAdd);
                 sum += toAdd;
-                calculateSum(oneSolution, sum, cIndex + 1, total, size, listSolution);
+                calculateSum(oneSolution, sum, cIndex + 1, total, size, listSolution, pv);
                 sum -= oneSolution.pop();
             }
         }
 
         return listSolution;
     }
+	
+	private void initializeConstraint() {
+		createRowConstraint();
+		createColConstraint();
+		createNonetConstraint();
+	}
+	
+	private void createRowConstraint() {
+		for(int i = 0; i != grid.getSize(); i++) {
+			rowConstraints.add(new Constraint());
+		}
+		for(Cell aCell : cells) {
+			int index = aCell.row();
+			rowConstraints.get(index).addVariable(aCell);
+		}
+	}
+	
+	private void createColConstraint() {
+		for(int i = 0; i != grid.getSize(); i++) {
+			colConstraints.add(new Constraint());
+		}
+		for(Cell aCell : cells) {
+			int index = aCell.col();
+			colConstraints.get(index).addVariable(aCell);
+		}
+	}
+	
+	private void createNonetConstraint() {
+		for(int i = 0; i != grid.getSize(); i++) {
+			nonetConstraints.add(new Constraint());
+		}
+		for(Cell aCell : cells) {
+			int index = aCell.getNonet();
+			nonetConstraints.get(index).addVariable(aCell);
+		}
+	}
+	
+	private boolean isCellValid(int row, int col, int nonet, int value) {
+		boolean valid = rowConstraints.get(row).isCellValid(value)
+				&& colConstraints.get(col).isCellValid(value)
+				&& nonetConstraints.get(nonet).isCellValid(value);
+		return valid;
+	}
 
 } // end of class KillerAdvancedSolver
